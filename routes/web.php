@@ -8,9 +8,10 @@ Route::get('/formulario', function () {
 });
 
 Route::get('/contacto', function (Request $request) {
-    echo "<pre>";
-    print_r($request ->get("nombre"));
-    echo "<pre>";
+    echo "<h3>Datos Recibidos:</h3>";
+    echo "<b>Nombre:</b> " . $request->get('nombre') . "<br>";
+    echo "<b>Email:</b> " . $request->get('email') . "<br>";
+    echo "<b>Mensaje:</b> " . $request->get('mensaje');
 });
 
 Route::get('/php-basico', function () {  

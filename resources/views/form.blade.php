@@ -34,9 +34,7 @@
         }
 
         h2 { text-align: center; color: #1f2937; margin-bottom: 25px; }
-
         .input-group { margin-bottom: 15px; }
-
         label { display: block; font-size: 0.85rem; font-weight: 600; color: #4b5563; margin-bottom: 5px; }
 
         input, textarea {
@@ -66,19 +64,9 @@
             transition: 0.3s;
         }
 
-        button:hover:not(:disabled) {
+        button:hover {
             background: var(--primary-hover);
             transform: translateY(-1px);
-        }
-
-        button:disabled { background: #9ca3af; cursor: not-allowed; }
-
-        .success-msg {
-            text-align: center;
-            background: #ecfdf5;
-            padding: 20px;
-            border-radius: 15px;
-            color: #065f46;
         }
     </style>
 </head>
@@ -87,35 +75,29 @@
     <div id="app">
         <div class="glass-card">
             
-            <div v-if="enviado" class="success-msg">
-                <h3>¡Gracias, @{{ nombre }}!</h3>
-                <p>Tu mensaje ha sido recibido. Te contactaremos pronto a @{{ email }}.</p>
-                <button @click="enviado = false" style="background: #10b981">Nuevo mensaje</button>
-            </div>
+            <h2>Contacto</h2>
+            
+            <form action="/contacto" method="GET" @submit="procesando">
+                
+                <div class="input-group">
+                    <label>Nombre</label>
+                    <input type="text" name="nombre" v-model="nombre" placeholder="Tu nombre" required>
+                </div>
 
-            <div v-else>
-                <h2>Contacto</h2>
-                <form @submit.prevent="enviarFormulario">
-                    <div class="input-group">
-                        <label>Nombre</label>
-                        <input type="text" v-model="nombre" placeholder="Tu nombre" required>
-                    </div>
+                <div class="input-group">
+                    <label>Correo Electrónico</label>
+                    <input type="email" name="email" v-model="email" placeholder="correo@ejemplo.com" required>
+                </div>
 
-                    <div class="input-group">
-                        <label>Correo Electrónico</label>
-                        <input type="email" v-model="email" placeholder="correo@ejemplo.com" required>
-                    </div>
+                <div class="input-group">
+                    <label>Mensaje</label>
+                    <textarea name="mensaje" v-model="mensaje" placeholder="Hola, me gustaría..." required></textarea>
+                </div>
 
-                    <div class="input-group">
-                        <label>Mensaje</label>
-                        <textarea v-model="mensaje" placeholder="Hola, me gustaría..." required></textarea>
-                    </div>
-
-                    <button type="submit" :disabled="cargando">
-                        @{{ cargando ? 'Enviando...' : 'Enviar Ahora' }}
-                    </button>
-                </form>
-            </div>
+                <button type="submit">
+                    @{{ cargando ? 'Procesando...' : 'Enviar Ahora' }}
+                </button>
+            </form>
 
         </div>
     </div>
@@ -128,22 +110,15 @@
                 const nombre = ref('');
                 const email = ref('');
                 const mensaje = ref('');
-                const enviado = ref(false);
                 const cargando = ref(false);
 
-                const enviarFormulario = () => {
+                const procesando = () => {
                     cargando.value = true;
-                    // Simulación de envío
-                    setTimeout(() => {
-                        cargando.value = false;
-                        enviado.value = true;
-                        // Opcional: Limpiar campos
-                        // mensaje.value = '';
-                    }, 1200);
+                    // Aquí no usamos preventDefault, permitimos que el navegador viaje a /contacto
                 };
 
                 return {
-                    nombre, email, mensaje, enviado, cargando, enviarFormulario
+                    nombre, email, mensaje, cargando, procesando
                 }
             }
         }).mount('#app')
